@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block main %}
+<div class="container">
+	<div class="postBlockA">
+		
+		
+		<div class="postHeader">
+			<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+			<p class="postTitle">{{ post.title }}</p>
+		</div>
+		<div class="postcontent">
+			{{ post.content|safe }}
+		</div>
+	</div>
+</div>
+
+<section class="commentsec">
+	<div class="commentform">
+		<i class="fa-solid fa-comments"></i>
+		<form action="." method="post">
+			{% csrf_token %}
+			<textarea name="message" cols="30" rows="10" placeholder="Leave us a comment" required style="resize: none;"></textarea>
+			{% if request.user.is_authenticated %}
+			    <button type="submit" class="btn">SEND</button>
+			{% else %}
+			    <a href="{% url 'login' %}">Must log In to leave a comment</a>
+			{% endif %}
+		</form>
+	</div>
+
+	<div class="comments">
+		{% if comments|length > 0 %}
+			{% for comment in comments %}
+			<div class="comment">
+				<p class="">{{ comment.user }}</p>
+				<p class="">{{ comment.text }}</p>
+				<p class="">{{ comment.timestamp }}</p>
+			</div>
+			{% endfor %}
+		{% else %}
+			<p>Be the first to leave a comment <i class="fa-regular fa-face-laugh-wink"></i></p>
+		{% endif %}
+	</div>
+</section>
+
+<div class="side">
+	{% for post in posts|slice:':5' %}
+		{% if post.status != 0 %}
+		<div class="article">
+			<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+			<div class="articleB">
+				<p class="posttit">{{ post.title }}</p>
+				<a href="{% url 'postpage' post.slug %}" class="btn" style="width: 100%;text-align: center;">Read</a>
+			</div>
+		</div>
+		{% endif %}
+	{% endfor %}
+</div>
+{% endblock %}

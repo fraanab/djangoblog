@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block main %}
+
+<div class="sign-container">
+
+    <h1>Sign up</h1>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        <div class="signup-item">
+            <label for="email"><i class="fa-solid fa-envelope"></i></label>
+            <input type="email" id="email" name="email" required placeholder="example@mail.com">
+        </div>
+        <div class="signup-item">
+            <label><i class="fa-solid fa-user"></i></label>
+            <input type="text" name="username" required placeholder="user">
+        </div>
+        <div class="signup-item">
+            <label for="password"><i class="fa-solid fa-lock"></i></label>
+            <input type="password" id="password" name="password1" required placeholder="Password">
+        </div>
+        <div class="signup-item">
+            <label for="password2"></i> <i class="fa-solid fa-lock"></i></label>
+            <input type="password" id="password2" name="password2" required placeholder="Repeat Password">
+        </div>
+
+        {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div class="signup-error">
+                        <p>{{ error|escape }}</p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% for error in form.non_field_errors %}
+                <div class="signup-error">
+                    <p>{{ error|escape }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="signup-submit">
+            <button type="submit" class="btn">Submit</button>
+            <a href="{% url 'login' %}" class="question">Already have an account? <span>click here</span></a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

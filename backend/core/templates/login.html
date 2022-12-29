@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Log In{% endblock %}
+{% block main %}
+
+<div class="sign-container">
+
+    <h1>Log In</h1>
+
+    <form action="." method="post">
+        {% csrf_token %}
+        <div class="signup-item">
+            <label for="username"><i class="fa-solid fa-user"></i></label>
+            <input type="text" name="username" id="username" placeholder="user" required>
+        </div>
+        <div class="signup-item">
+            <label for="password"><i class="fa-solid fa-lock"></i></label>
+            <input type="password" name="password" id="password" placeholder="******" required>
+        </div>
+        {% if form.errors %}
+        {% for field in form %}
+        {% for error in field.errors %}
+        <div class="signup-error">
+            <p>{{ error|escape }}</p>
+        </div>
+        {% endfor %}
+        {% endfor %}
+
+        {% for error in form.non_field_errors %}
+        <div class="signup-error">
+            <p>{{ error|escape }}</p>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="signup-submit">
+            <button class="btn">Submit</button>
+            <a href="{% url 'signup' %}" class="question">You don't have an account? <span>click here</span></a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}My account{% endblock %}
+{% block main %}
+
+<section class="user-card">
+	<ul class="userinfo">
+		<li><strong>Username: </strong>{{ request.user.username }}</li>
+		<li><strong>E-mail: </strong>{{ request.user.email }}</li>
+	</ul>
+	
+	<a id="edit-link" href="{% url 'edit_myaccount' %}" class="btn">Edit</a>	
+</section>
+
+<div class="blockA">
+<h2 style="text-align: center; margin: 20px 0;">Comments</h2>
+<section>
+	{% if comments|length > 0 %}
+		{% for comment in comments %}
+			<div class="comment-article">
+				<img src="{{ comment.post_commented.get_thumbnail }}" alt="xd">
+				<div class="articleB">
+					<a id="post_commented_id" href="/post/{{ comment.post_commented.slug }}">{{ comment.post_commented }}</a>
+					<a href="/post/{{ comment.post_commented.slug }}" class="btn" style="width: 100%;text-align: center;">Read</a>
+				</div>
+				<p class="artdate">{{ comment.timestamp }}</p>
+				<form action="." method="post" class="delete">
+					{% csrf_token %}
+					<!-- <input name="commenttext" value="{{ comment.text }}" readonly> -->
+					<textarea name="commenttext" readonly>{{ comment.text }}</textarea>
+					<button type="submit">Delete Comment</button>
+				</form>
+			</div>
+		{% endfor %}
+	{% else %}
+		<div class="empty">
+			<img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcdn.betterttv.net%2Femote%2F5f5130616084af6c171975d8%2F3x&f=1&nofb=1&ipt=325c064593f852d7cd496b48daec75e8bc03033d3fe5d38fabbf0c7d11490916&ipo=images" alt="empty place">
+			<p>When you leave a comment, you will see it here</p>
+		</div>
+	{% endif %}
+	
+</section>	
+</div>
+
+
+{% endblock %}

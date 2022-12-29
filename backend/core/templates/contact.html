@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Contact{% endblock %}
+{% block main %}
+
+<div class="contact-title">
+	<i class="fa-regular fa-envelope"></i>
+	<i class="fa-solid fa-hand-point-right" id="righthand"></i>
+	<h1>Send us a message</h1>
+</div>
+
+<section class="contact">
+	
+	<form action="." method="POST">
+		{% csrf_token %}
+		{{ form }}
+		<button type="submit" class="btn">Send</button>
+	</form>
+
+</section>
+
+{% endblock %}
+{% block scripts %}
+<script>
+	
+	let rhand = document.getElementById('righthand')
+	function myFunction(z) {
+		if (z.matches) { // If media query matches
+			rhand.classList.remove('fa-hand-point-right')
+			rhand.classList.add('fa-hand-point-down')
+			rhand.style.transform = 'scaleX(-1)'
+		}else{
+			rhand.classList.remove('fa-hand-point-down')
+			rhand.classList.add('fa-hand-point-right')
+			rhand.style.transform = 'scaleX(1)'
+		}
+	}
+
+	let z = window.matchMedia("(max-width: 1024px)")
+	myFunction(z) // Call listener function at run time
+	z.addListener(myFunction) // Attach listener function on state changes
+
+</script>
+{% endblock %}

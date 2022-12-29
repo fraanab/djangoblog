@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}{% endblock %}</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'blog1.css' %}">
+</head>
+<body>
+	<!-- <i class="fa-solid fa-bars" id="navbtn"></i> -->
+	<!-- <h1 id="navbtn" class="title">Untitled</h1> -->
+	<nav id="navbar">
+		<div class="navlinks" id="navlinks">
+			<a href="/">Home</a>
+			<a href="#">Services</a>
+			<a href="#">Pricing</a>
+			<a href="{% url 'contact' %}">Contact</a>
+		</div>
+		<h1 class="title" id="navbtn">Untitled</h1>
+		<div class="log">
+			{% if request.user.is_authenticated %}
+			<a class="btn" href="{% url 'logout' %}">Log Out</a>
+				{% if request.user.is_superuser %}
+				<a class="btn" href="{% url 'admin_dashboard' %}">Dashboard</a>
+				{% else %}
+				<a href="{% url 'myaccount' %}" class="btn">My Account</a>
+				{% endif %}
+			{% else %}
+			<a href="{% url 'login' %}" class="btn">Log In</a>
+			<a href="{% url 'signup' %}" class="btn">Sign Up</a>
+			{% endif %}
+		</div>
+	</nav>
+
+	<main id="main">
+		{% block main %}
+		{% endblock %}	
+	</main>
+	
+	<footer>
+		<ul>
+			<h3>About</h3>
+			<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus ducimus cumque qui corporis, fugit neque, tenetur saepe, autem doloribus, nihil quo maiores? Commodi necessitatibus cumque minus dignissimos sunt tenetur consequuntur recusandae sapiente! Eius dignissimos fugiat odit deserunt aspernatur similique rerum eos repellat!</p>
+		</ul>
+		<ul>
+			<h3>Contact</h3>
+			<li><a href="#">Instagram <i class="fa-brands fa-instagram"></i></a></li>
+			<li><a href="#">Twitter <i class="fa-brands fa-twitter"></i></a></li>
+			<li><a href="#">Discord <i class="fa-brands fa-discord"></i></a></li>
+		</ul>
+		<ul id="susbcribe">
+			<h3>Subscribe</h3>
+			<form action="/newsletter/" method="post">
+				{% csrf_token %}
+				<input class="input" type="email" name="email" placeholder="E-mail">
+				<button type="submit">Receive Newsletter</button>
+			</form>
+		</ul>
+	</footer>
+
+	<script>
+		let navbtn = document.getElementById('navbtn')
+		let navbar = document.getElementById('navlinks')
+		let main = document.getElementById('main')
+		function openNav(){
+			navbar.style.width = '300px'
+		}
+		function closeNav(){
+			navbar.style.width = '0px'
+		}
+
+		function myFunction(x) {
+			if (x.matches) { // If media query matches
+				navbtn.addEventListener('click',openNav)
+				main.addEventListener('click', closeNav)
+				navbtn.style.cursor = 'pointer'
+			}else{
+				navbar.style.width = '300px'
+				navbtn.style.cursor = 'default'
+				main.removeEventListener('click', closeNav)
+				console.log(':)')
+			}
+		}
+
+		let x = window.matchMedia("(max-width: 1200px)")
+		myFunction(x) // Call listener function at run time
+		x.addListener(myFunction) // Attach listener function on state changes
+	</script>
+	{% block scripts %}
+	{% endblock %}
+</body>
+</html>

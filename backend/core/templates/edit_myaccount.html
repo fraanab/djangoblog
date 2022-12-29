@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Editing{% endblock %}
+{% block main %}
+
+<form action="." method="post" autocomplete="off" class="editacc">
+	{% csrf_token %}
+
+	<input type="text" name="username" value="{{ request.user.username }}">
+	<input type="email" name="email" value="{{ request.user.email }}">
+	<input type="password" name="confirmation" placeholder="Enter your current Password to validate" autocomplete="asdasd" spellcheck="false" autocorrect='off'>
+
+	<button type="submit" class="btn">SUBMIT</button>
+</form>
+
+{% endblock %}

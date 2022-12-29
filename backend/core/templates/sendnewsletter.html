@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Newsletter admin{% endblock %}
+{% block main %}
+
+<form action="." method="post" style="
+	border: 2px solid #666; 
+	padding: 50px; 
+	display:flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 20px;
+	">
+
+	{% csrf_token %}
+	<p>Click to send</p>
+	<button type="submit" class="btn">Send Newsletter</button>
+	
+</form>
+
+{% endblock %}

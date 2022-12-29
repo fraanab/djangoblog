@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block title %}{{ request.user.username }}dashboard{% endblock %}
+{% block main %}
+<style>
+	:root{
+		scroll-behavior: smooth;
+	}
+</style>
+<div class="dash-resume">
+	<h2>Welcome {{ request.user.username }}</h2>
+	<a href="#" id="addpost">New Post<i class="fa-solid fa-plus"></i></a>
+	<a href="#allposts">Posts: {{ totalposts }} <i class="fa-solid fa-quote-left"></i></a>
+	<a href="#mails">Messages: {{ mails_count }} <i class="fa-solid fa-message"></i></a>
+	<a href="#templating">Subscribers: {{ newslettersubs_total }} <i class="fa-solid fa-users"></i></a>
+</div>
+<div class="django-links">
+	<a href="{% url 'admin:index' %}" target="_blank" class="btn" id="django-link">Take me to the DJango page</a>
+</div>
+<div class="dashboard">
+
+	<section id="newpost-form">
+		<form action="{% url 'newpost' %}" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ post_form }}
+			{{ post_form.media }}
+			<button type="submit" class="btn">Create</button>
+		</form>
+	</section>
+
+	<div class="blockA" id="allposts">
+	<section>
+		{% for post in posts %}
+		<div class="article" style="height: 100%;">
+			<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+			<div class="articleB">
+				<a href="/post/{{ post.slug }}" class="btn" style="width: 100%;text-align: center;">Read</a>
+			</div>
+			<form action="." method="post" class="delete">
+				{% csrf_token %}
+				<textarea name="posttitle" readonly>{{ post.title }}</textarea>
+				<button type="submit">Delete Post</button>
+			</form>
+			<p class="artdate">{{ post.created_on }}</p>
+		</div>
+		{% endfor %}
+	</section>
+	</div>
+</div>
+
+<div class="django-links">
+	<a href="{% url 'admin:index' %}" target="_blank" class="btn" id="django-link">Take me to the DJango page</a>
+</div>
+
+<section class="mails" id="mails">
+	<h2>Invoice</h2>
+	<p class="subtle">( showing: 10 most recent messages )</p>
+	<table class="tg">
+		<thead>
+			<tr>
+				<th class="tg-oyn9">From</th>
+				<th class="tg-oyn9">Message</th>
+				<th class="tg-oyn9">Date</th>
+				<th class="tg-oyn9">Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for mail in mails|slice:":10" %}
+				<tr>
+					<td>{{ mail.email }}</td>
+					<td>{{ mail.message }}</td>
+					<td>{{ mail.timestamp }}</td>
+					<td><a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ mail.email }}&su=answer" target="_blank" class="btn">Answer</a></td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</section>
+
+<section id="templating">
+	
+	<form action="{% url 'newhtml' %}" method="post" enctype="multipart/form-data" style="
+		padding: 50px; 
+		display:flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 20px;
+		">
+
+		{% csrf_token %}
+		<p>Upload Template</p>
+		<!-- <input type="file" name="templatein" required>	 -->
+		{{ htmlform }}
+		{{ htmlform.media }}
+		<button title="To keep in mind: Images can't be static! you won't be able to see them" type="submit" class="btn">Submit HTML Template</button>
+
+	</form>
+	<i class="fa-solid fa-hand-point-right" id="righthand"></i>
+	<form action="{% url 'sendnewsletter' %}" method="post" style="
+	padding: 50px; 
+	display:flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 20px;
+	">
+
+		{% csrf_token %}
+
+		<ul>
+			<li>Subscriptions to newsletter:</li>
+			{% for subs in newslettersubs %}
+			<li>{{ subs.subscribedmail }}</li>
+			{% endfor %}
+		</ul>
+
+		<p>Click to send NEWSLETTER to users</p>
+
+
+
+		<button type="submit" class="btn">Send Newsletter</button>
+		
+	</form>
+
+</section>
+<div class="django-links">
+	<a href="{% url 'admin:index' %}" target="_blank" class="btn" id="django-link">Take me to the DJango page</a>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+	let newpost = document.getElementById('addpost')
+	let postform = document.getElementById('newpost-form')
+	newpost.addEventListener('click',function(){
+		if(postform.style.height === '0px'){
+			postform.style.height = '100%'
+		}else{postform.style.height = '0px'}
+	})
+
+
+	let rhand = document.getElementById('righthand')
+	function myFunction(x) {
+		if (x.matches) { // If media query matches
+			rhand.classList.remove('fa-hand-point-right')
+			rhand.classList.add('fa-hand-point-down')
+		}else{
+			rhand.classList.remove('fa-hand-point-down')
+			rhand.classList.add('fa-hand-point-right')
+		}
+	}
+
+	let x = window.matchMedia("(max-width: 1024px)")
+	myFunction(x) // Call listener function at run time
+	x.addListener(myFunction) // Attach listener function on state changes
+</script>
+{% endblock %}

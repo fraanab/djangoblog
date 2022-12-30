@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "djangoblog-1"
+version = "0.1.0"
+description = ""
+authors = ["Replit user <<>>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+gunicorn = "^20.1.0"
+Django = "^4.1.4"
+Pillow = "^9.3.0"
+django-ckeditor = "^6.5.1"
+tzdata = "^2022.7"
+django-cors-headers = "^3.13.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

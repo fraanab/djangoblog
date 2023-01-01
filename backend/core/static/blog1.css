@@ -173,6 +173,12 @@ footer p{
 	width: 100%;
 	padding: 0 10px 10px 10px;
 }
+.blockA h2{
+	text-align: center;
+	color: var(--a-c);
+	text-shadow: 1px 1px 2px var(--a-d);
+	font-family: 'Pacifico';
+}
 .blockA section{
 	display: flex;
 	flex-direction: row;
@@ -885,6 +891,11 @@ border: 1px solid #000;
 	}
 	.commentform form{
 		width: 100%
+	}
+	#newpost-form form .btn,
+	#newpost-form form select,
+	#newpost-form form input:not(#id_image){
+		width: 95%
 	}
 }
 

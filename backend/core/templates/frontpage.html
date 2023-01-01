@@ -3,16 +3,38 @@
 {% block main %}
 <div class="container">
 	<div class="blockA">
+		<h2>Admin posts</h2>
+		<br>
 		<section>
-			{% for post in posts %}
+
+			{% for post in adminposts %}
 				{% if post.status != 0 %}
 				<div class="article">
 					<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
 					<div class="articleB">
 						<a class="posttitle" href="{% url 'postpage' post.slug %}">{{ post.title }}</a>
+						<p class="subtle">Author: {{ post.author }}</p>
 						<a href="{% url 'postpage' post.slug %}" class="btn" style="width: 100%;text-align: center;">Read</a>
+						<p class="artdate">{{ post.created_on }}</p>
 					</div>
-					<p class="artdate">{{ post.created_on }}</p>
+				</div>
+				{% endif %}
+			{% endfor %}
+
+		</section>
+		<br>
+		<h2>All Posts</h2>
+		<section>
+			{% for post in allposts %}
+				{% if post.status != 0 %}
+				<div class="article">
+					<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+					<div class="articleB">
+						<a class="posttitle" href="{% url 'postpage' post.slug %}">{{ post.title }}</a>
+						<p class="subtle">Author: {{ post.author }}</p>
+						<a href="{% url 'postpage' post.slug %}" class="btn" style="width: 100%;text-align: center;">Read</a>
+						<p class="artdate">{{ post.created_on }}</p>
+					</div>
 				</div>
 				{% endif %}
 			{% endfor %}

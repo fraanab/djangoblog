@@ -11,7 +11,44 @@
 	<a id="edit-link" href="{% url 'edit_myaccount' %}" class="btn">Edit</a>	
 </section>
 
-<div class="blockA">
+<h2 style="text-align: center; color: #fff; text-shadow: 2px 2px #aaa, 3px 3px 12px #888;margin: 25px 0;">Welcome {{ request.user }}</h2>
+<div class="dash-resume" style="justify-content: center;gap: 30px;">
+	<a href="#edit-link" id="addpost">New Post<i class="fa-solid fa-plus"></i></a>
+	<a href="#comments" id="mycomments">My Comments<i class="fa-solid fa-comment"></i></a>
+</div>
+<section id="newpost-form">
+	<form action="{% url 'newpost' %}" method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ post_form }}
+		{{ post_form.media }}
+		<button type="submit" class="btn">Create</button>
+	</form>
+</section>
+
+<div class="blockA" id="allposts">
+	<section>
+		{% if user_posts|length > 0 %}
+			{% for post in user_posts %}
+			<div class="article" style="height: 100%;">
+				<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+				<div class="articleB">
+					<a href="/post/{{ post.slug }}" class="btn" style="width: 100%;text-align: center;">Read</a>
+				</div>
+				<form action="." method="post" class="delete">
+					{% csrf_token %}
+					<textarea name="posttitle" readonly>{{ post.title }}</textarea>
+					<button type="submit">Delete Post</button>
+				</form>
+				<p class="artdate">{{ post.created_on }}</p>
+			</div>
+			{% endfor %}
+		{% else %}
+			<a href="#newpost-form" class="btn">Make a post!</a>
+		{% endif %}
+	</section>
+</div>
+
+<div class="blockA" id="comments">
 <h2 style="text-align: center; margin: 20px 0;">Comments</h2>
 <section>
 	{% if comments|length > 0 %}
@@ -25,7 +62,6 @@
 				<p class="artdate">{{ comment.timestamp }}</p>
 				<form action="." method="post" class="delete">
 					{% csrf_token %}
-					<!-- <input name="commenttext" value="{{ comment.text }}" readonly> -->
 					<textarea name="commenttext" readonly>{{ comment.text }}</textarea>
 					<button type="submit">Delete Comment</button>
 				</form>
@@ -42,4 +78,16 @@
 </div>
 
 
+{% endblock %}
+{% block scripts %}
+<script>
+let newpost = document.getElementById('addpost')
+	let postform = document.getElementById('newpost-form')
+	newpost.addEventListener('click',function(){
+		if(postform.style.height === '0px'){
+			postform.style.height = '100%'
+		}else{postform.style.height = '0px'}
+	})
+
+</script>
 {% endblock %}

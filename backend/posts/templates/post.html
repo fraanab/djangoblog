@@ -16,6 +16,15 @@
 </div>
 
 <section class="commentsec">
+
+	{% if request.user.is_superuser %}
+		<form action="{% url 'delete' post.slug %}" method="POST" class="delete">
+			{% csrf_token %}
+			<button style="width:initial;margin: 0 auto;border-radius: initial;">Delete this post</button>
+		</form>
+		<p class="subtle">DELETING IS PERMANENT</p>
+	{% endif %}
+
 	<div class="commentform">
 		<i class="fa-solid fa-comments"></i>
 		<form action="." method="post">

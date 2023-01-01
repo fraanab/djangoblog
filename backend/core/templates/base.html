@@ -71,8 +71,8 @@
 			navbar.style.width = '0px'
 		}
 
-		function myFunction(x) {
-			if (x.matches) { // If media query matches
+		function myFunction(n) {
+			if (n.matches) { // If media query matches
 				navbtn.addEventListener('click',openNav)
 				main.addEventListener('click', closeNav)
 				navbtn.style.cursor = 'pointer'
@@ -84,9 +84,9 @@
 			}
 		}
 
-		let x = window.matchMedia("(max-width: 1200px)")
-		myFunction(x) // Call listener function at run time
-		x.addListener(myFunction) // Attach listener function on state changes
+		let n = window.matchMedia("(max-width: 1200px)")
+		myFunction(n) // Call listener function at run time
+		n.addListener(myFunction) // Attach listener function on state changes
 	</script>
 	{% block scripts %}
 	{% endblock %}

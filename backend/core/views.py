@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.conf import settings
-from posts.models import Post, Comment #models
+from posts.models import Post, Comment, STATUS #models
 from .models import Contact, Newsletter, HtmlTemplates #models
-from django.contrib.auth import login #login django
-from .forms import SignUpForm, NewPost, ContactForm, HtmlTemplatesForm #forms
+from django.contrib.auth import login, get_user_model #login django
+from .forms import SignUpForm, NewPost, UserPost, ContactForm, HtmlTemplatesForm #forms
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password #edit my account
 from django.core.mail import send_mail #newsletter
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+from django import forms
 
 def newsletterinfo(request):
 	if request.method == 'POST':
@@ -46,8 +46,10 @@ def sendnewsletter(request):
 		return redirect('/')
 
 def frontpage(request):
-	posts = Post.objects.all()
-	return render(request, 'frontpage.html', {'posts':posts})
+	adminposts = Post.objects.filter(author=1)
+	allposts = Post.objects.all()
+
+	return render(request, 'frontpage.html', {'allposts':allposts, 'adminposts':adminposts})
 
 def contact(request):
 	if request.method == 'POST':
@@ -72,15 +74,25 @@ def signup(request):
 
 @login_required
 def myaccount(request):
-	comments = Comment.objects.filter(user=request.user)
-	if request.method == 'POST':
-		commenttext = request.POST.get('commenttext')
-		Comment.objects.filter(text=commenttext).delete()
-		return redirect('myaccount')
-	context = {
-		'comments': comments
-	}
-	return render(request, 'myaccount.html', context)
+	if request.user.is_superuser:
+		return redirect('admin_dashboard')
+	else:
+		post_form = UserPost()
+		user_posts = Post.objects.filter(author=request.user)
+		comments = Comment.objects.filter(user=request.user)
+
+		if request.method == 'POST':
+			commenttext = request.POST.get('commenttext')
+			post_title = request.POST.get('posttitle')
+			Post.objects.filter(title=post_title).delete()
+			Comment.objects.filter(text=commenttext).delete()
+			return redirect('myaccount')
+		context = {
+			'post_form': post_form,
+			'user_posts':user_posts,
+			'comments': comments
+		}
+		return render(request, 'myaccount.html', context)
 
 @login_required
 def edit_myaccount(request):
@@ -119,19 +131,37 @@ def admin_dashboard(request):
 
 @login_required
 def newpost(request):
-	if request.user.is_superuser:
-		if request.method == 'POST':
-			post_form = NewPost(request.POST, request.FILES)
-			if post_form.is_valid():
-				new_post = post_form.save(commit=False)
-				new_post.slug = new_post.title.replace(" ", "-")
-				new_post.image = request.FILES.get('image')
-				new_post.save()
-				return redirect('admin_dashboard')
-			else:
-				post_form = NewPost()
-	else:
-		return redirect('/')
+	User = get_user_model()
+	if request.method == 'POST' and request.user.is_superuser:
+		post_form = NewPost(request.POST, request.FILES)
+		if post_form.is_valid():
+			new_post = post_form.save(commit=False)
+			new_post.slug = new_post.title.replace(" ", "-")
+			new_post.image = request.FILES.get('image')
+			new_post.save()
+			return redirect('admin_dashboard')
+		else:
+			post_form = NewPost()
+			return redirect('admin_dashboard')
+	elif request.method == 'POST' and not request.user.is_superuser:
+		post_form = UserPost(request.POST, request.FILES)
+		if post_form.is_valid():
+			new_post = post_form.save(commit=False)
+			new_post.slug = new_post.title.replace(" ", "-")
+			new_post.image = request.FILES.get('image')
+			new_post.save()
+			Post.objects.filter(slug=new_post.slug).update(status=STATUS[1][0],author=request.user)
+
+			print('saved')
+			return redirect('admin_dashboard')
+
+		else:
+			post_form = NewPost()
+			author = request.user.id
+			stat = STATUS[1][0]
+			print('form wasnt saved:', request.POST.get('content'), author, stat, 'form errors:', post_form.errors)
+			return redirect('admin_dashboard')
+	return redirect('/')
 
 @login_required
 def newhtml(request):
@@ -148,4 +178,16 @@ def newhtml(request):
 		else:
 			form = HtmlTemplatesForm()
 	else:
+		return redirect('/')
+
+@login_required
+def delete(request, slug):
+	if request.user.is_superuser:
+		if request.method == 'POST':
+			post = Post.objects.filter(slug=slug)
+			post.delete()
+			print('post deleted')
+			return redirect('/')
+	else:
+		print('denied')
 		return redirect('/')

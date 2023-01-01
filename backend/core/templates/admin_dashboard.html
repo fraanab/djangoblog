@@ -140,8 +140,8 @@
 
 
 	let rhand = document.getElementById('righthand')
-	function myFunction(x) {
-		if (x.matches) { // If media query matches
+	function myFunction(a) {
+		if (a.matches) { // If media query matches
 			rhand.classList.remove('fa-hand-point-right')
 			rhand.classList.add('fa-hand-point-down')
 		}else{
@@ -150,8 +150,8 @@
 		}
 	}
 
-	let x = window.matchMedia("(max-width: 1024px)")
-	myFunction(x) // Call listener function at run time
-	x.addListener(myFunction) // Attach listener function on state changes
+	let a = window.matchMedia("(max-width: 1024px)")
+	myFunction(a) // Call listener function at run time
+	a.addListener(myFunction) // Attach listener function on state changes
 </script>
 {% endblock %}

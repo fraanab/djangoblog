@@ -17,6 +17,11 @@ class NewPost(forms.ModelForm):
 		fields = ['image', 'title', 'content', 'status', 'author',]
 		# fields = ['image', 'title', 'status', 'author',]
 
+class UserPost(forms.ModelForm):
+	class Meta:
+		model = Post
+		fields = ['image', 'title', 'content']
+
 class ContactForm(forms.ModelForm):
 	class Meta:
 		model = Contact

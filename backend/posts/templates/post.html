@@ -12,6 +12,17 @@
 		<div class="postcontent">
 			{{ post.content|safe }}
 		</div>
+
+		<br>
+		<div class="upvotes">
+			<form action="{% url 'upvote' post.slug %}" method="post">
+				{% csrf_token %}
+				<button>
+					<i class="fa-solid fa-heart"></i>
+				</button>
+				<p>{{ post.upvotes }}</p>
+			</form>
+		</div>
 	</div>
 </div>
 
@@ -33,7 +44,7 @@
 			{% if request.user.is_authenticated %}
 			    <button type="submit" class="btn">SEND</button>
 			{% else %}
-			    <a href="{% url 'login' %}">Must log In to leave a comment</a>
+			    <a href="{% url 'login' %}" style="color:#fff">Must log In to leave a comment</a>
 			{% endif %}
 		</form>
 	</div>

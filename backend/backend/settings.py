@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-52!(e^c5t7*e%45+zz)+ydqp=srf2fr=alg9z((xw7sk@v*eqa
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://c41b5865-d3f1-4b3a-b661-e743b5e7f6d1.id.repl.co', 'c41b5865-d3f1-4b3a-b661-e743b5e7f6d1.id.repl.co', 'djangoblog-1.sentey.repl.co']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://c41b5865-d3f1-4b3a-b661-e743b5e7f6d1.id.repl.co', 'c41b5865-d3f1-4b3a-b661-e743b5e7f6d1.id.repl.co', 'djangoblog-1.sentey.repl.co']
 
 CSRF_TRUSTED_ORIGINS = ['https://c41b5865-d3f1-4b3a-b661-e743b5e7f6d1.id.repl.co', 'https://djangoblog-1.sentey.repl.co']
 CORS_ALLOW_ALL_ORIGINS = False

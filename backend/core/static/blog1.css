@@ -805,7 +805,34 @@ border: 1px solid #000;
 	font-size: 2rem;
 }
 
-
+.upvotes{
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.upvotes form{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+.upvotes form button{
+	font-size: 1.5rem;
+	background: none;
+	border: none;
+	cursor: pointer;
+	transition: .3s;
+	color: var(--a-d);
+	text-shadow: 1px 2px #ccc;
+}
+.upvotes form button:active{
+	color: #333;
+}
+.upvotes form button:hover{
+	transform: scale(1.2);
+}
 @keyframes jumping{
 	from{
 		transform: translateY(-20px);

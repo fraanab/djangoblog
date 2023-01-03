@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post, Comment
+from django.http import HttpResponse
 
 def postpage(request, slug):
 	post = get_object_or_404(Post, slug=slug)
@@ -22,3 +23,14 @@ def postpage(request, slug):
 		'posts': posts
 	}
 	return render(request, 'post.html', context)
+
+def upvote(request, slug):
+	post = get_object_or_404(Post, slug=slug)
+	if request.user.is_authenticated:
+		if request.method == 'POST':
+			post.upvotes += 1
+			Post.objects.filter(slug=slug).update(upvotes=post.upvotes)
+			# return HttpResponse(f'number of upvotes: {post.upvotes}')
+			return redirect(f'/post/{slug}')
+	else:
+		return redirect('login')

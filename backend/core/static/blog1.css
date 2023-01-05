@@ -523,6 +523,7 @@ background: #eee;
 .mails{
 	margin: 10vh 0;
 	padding: 0 50px;
+  overflow-x:scroll;
 }
 .mails table{
 	box-shadow: 5px 5px #333;

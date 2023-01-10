@@ -14,13 +14,14 @@ class SignUpForm(UserCreationForm):
 class NewPost(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ['image', 'title', 'content', 'status', 'author',]
-		# fields = ['image', 'title', 'status', 'author',]
+		fields = ['thumbnail', 'title', 'content', 'status', 'author',]
+		# fields = ['thumbnail', 'title', 'status', 'author',]
 
 class UserPost(forms.ModelForm):
 	class Meta:
 		model = Post
-		fields = ['image', 'title', 'content']
+		# fields = ['thumbnail', 'title']
+		fields = ['thumbnail', 'title', 'content']
 
 class ContactForm(forms.ModelForm):
 	class Meta:

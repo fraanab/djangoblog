@@ -30,7 +30,7 @@
 		{% if user_posts|length > 0 %}
 			{% for post in user_posts %}
 			<div class="article" style="height: 100%;">
-				<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+				<img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
 				<div class="articleB">
 					<a href="/post/{{ post.slug }}" class="btn" style="width: 100%;text-align: center;">Read</a>
 				</div>
@@ -54,7 +54,7 @@
 	{% if comments|length > 0 %}
 		{% for comment in comments %}
 			<div class="comment-article">
-				<img src="{{ comment.post_commented.get_thumbnail }}" alt="xd">
+				<img src="{{ comment.post_commented.thumbnail.url }}" alt="xd">
 				<div class="articleB">
 					<a id="post_commented_id" href="/post/{{ comment.post_commented.slug }}">{{ comment.post_commented }}</a>
 					<a href="/post/{{ comment.post_commented.slug }}" class="btn" style="width: 100%;text-align: center;">Read</a>

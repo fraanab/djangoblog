@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}{{ post.title }}{% endblock %}
+{% load static %}
 {% block main %}
 <div class="container">
 	<div class="postBlockA">
 		
 		
 		<div class="postHeader">
-			<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+			<img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
 			<p class="postTitle">{{ post.title }}</p>
 		</div>
 		<div class="postcontent">
@@ -17,10 +18,9 @@
 		<div class="upvotes">
 			<form action="{% url 'upvote' post.slug %}" method="post">
 				{% csrf_token %}
-				<button>
-					<i class="fa-solid fa-heart"></i>
+				<button class="btn">
+					<i class="fa-solid fa-heart"></i> {{ post.upvotes }}
 				</button>
-				<p>{{ post.upvotes }}</p>
 			</form>
 		</div>
 	</div>
@@ -68,7 +68,7 @@
 	{% for post in posts|slice:':5' %}
 		{% if post.status != 0 %}
 		<div class="article">
-			<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+			<img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
 			<div class="articleB">
 				<p class="posttit">{{ post.title }}</p>
 				<a href="{% url 'postpage' post.slug %}" class="btn" style="width: 100%;text-align: center;">Read</a>

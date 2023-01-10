@@ -31,7 +31,7 @@
 	<section>
 		{% for post in posts %}
 		<div class="article" style="height: 100%;">
-			<img src="{{ post.get_thumbnail }}" alt="{{ post.title }}">
+			<img src="{{ post.thumbnail.url }}" alt="{{ post.title }}">
 			<div class="articleB">
 				<a href="/post/{{ post.slug }}" class="btn" style="width: 100%;text-align: center;">Read</a>
 			</div>

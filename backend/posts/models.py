@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 from django.core.files import File
+from cloudinary.models import CloudinaryField
 from io import BytesIO
 from PIL import Image
 
@@ -12,40 +13,23 @@ STATUS = (
 
 
 class Post(models.Model):
-	image = models.ImageField(upload_to='uploads/', blank=True, null=True)
-	thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
-	title = models.CharField(max_length=200, unique=True)
-	slug = models.SlugField(max_length=200, unique=True)
-	content = RichTextField()
-	# author = models.CharField(max_length=100)
-	author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', blank=True, null=True)
-	status = models.IntegerField(choices=STATUS, default=1)
-	created_on = models.DateTimeField(auto_now_add=True)
-	updated_on = models.DateTimeField(auto_now=True)
-	upvotes = models.IntegerField(default=0)
+  thumbnail = models.ImageField(upload_to='uploads/', blank=True, null=True)
+  # image = CloudinaryField('image', null=True, blank=True)
+  # thumbnail = CloudinaryField('image', null=True, blank=True)
+  title = models.CharField(max_length=200, unique=True)
+  slug = models.SlugField(max_length=200, unique=True)
+  content = RichTextField(null=True, blank=True)
+  # author = models.CharField(max_length=100)
+  author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', blank=True, null=True)
+  status = models.IntegerField(choices=STATUS, default=1)
+  created_on = models.DateTimeField(auto_now_add=True)
+  updated_on = models.DateTimeField(auto_now=True)
+  upvotes = models.IntegerField(default=0)
 
-	class Meta:
-		ordering = ['-created_on',]
-	def __str__(self):
-		return self.title
-	def get_thumbnail(self):
-		if self.thumbnail:
-			return self.thumbnail.url
-		else:
-			if self.image:
-				self.thumbnail = self.make_thumbnail(self.image)
-				self.save()
-				return self.thumbnail.url
-			else:
-				return 'https://via.placeholder.com/240x240x.jpg'
-	def make_thumbnail(self, image, size=(300,300)):
-		img = Image.open(image)
-		img.convert('RGB')
-		img.thumbnail(size)
-		thumb_io = BytesIO()
-		img.save(thumb_io, 'PNG', quality=85)
-		thumbnail = File(thumb_io, name=image.name)
-		return thumbnail
+  class Meta:
+    ordering = ['-created_on',]
+  def __str__(self):
+    return self.title
 
 class Comment(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='users')
